@@ -1,63 +1,54 @@
-# Step 1: Create a Node class representing each carriage (vagon)
-class CarriageNode:
-    def __init__(self, cargo_type):
-        self.cargo = cargo_type  # What is inside the carriage (e.g., Coal, Passengers)
-        self.next = None         # The mechanical hook pointing to the next carriage
+class Carriage:
+    def __init__(self, cargo):
+        self.cargo = cargo
+        self.next = None
 
-# Step 2: Create the Linked List class representing the entire Train
-class TrainSystem:
+class Train:
     def __init__(self):
-        self.head = None  # The locomotive (start of the train)
+        self.head = None
 
-    # Method to attach a new carriage to the END of the train
-    def attach_carriage(self, cargo_type):
-        new_carriage = CarriageNode(cargo_type)
+    def add(self, cargo):
+        new_carriage = Carriage(cargo)
         
-        # If the train is completely empty, the new carriage becomes the first one (connected to locomotive)
-        if self.head is None:
+        # if train is empty, this is the first carriage attached to the engine
+        if not self.head:
             self.head = new_carriage
-            print(f"Started the train. First carriage attached: [{cargo_type}]")
+            print(f"Train started with: [{cargo}]")
             return
         
-        # If there are already carriages, we must walk to the end of the train
+        # traverse to the end of the train
         current = self.head
-        while current.next is not None:
-            current = current.next  # Move to the next carriage
+        while current.next:
+            current = current.next
             
-        # We found the last carriage. Now, hook the new carriage to it.
+        # attach to the last carriage
         current.next = new_carriage
-        print(f"New carriage attached to the back: [{cargo_type}]")
+        print(f"Attached to back: [{cargo}]")
 
-    # Method to visually display the train's layout
-    def show_train_layout(self):
-        print("\n--- Current Train Layout ---")
-        
-        if self.head is None:
-            print("The train has no carriages yet.")
+    def display(self):
+        if not self.head:
+            print("Train is currently empty.")
             return
 
         current = self.head
-        # Starting with the locomotive
-        layout = "Locomotive -> " 
+        layout = "Engine -> " 
         
-        # Walk through each carriage and add it to our visual layout
-        while current is not None:
+        # build the visual layout string
+        while current:
             layout += f"[{current.cargo}] -> "
             current = current.next
             
-        layout += "(End of Train)"
-        print(layout)
+        layout += "(End)"
+        print(f"\n{layout}\n")
 
-# --- Program Execution Section ---
-
-# 1. Create a new empty train
-my_freight_train = TrainSystem()
-
-# 2. Attach carriages one by one
-my_freight_train.attach_carriage("Coal")
-my_freight_train.attach_carriage("Oil Barrels")
-my_freight_train.attach_carriage("Lumber")
-my_freight_train.attach_carriage("Steel Pipes")
-
-# 3. Display the final layout of the train
-my_freight_train.show_train_layout()
+if __name__ == "__main__":
+    my_train = Train()
+    
+    # loading up the train
+    my_train.add("Coal")
+    my_train.add("Oil Barrels")
+    my_train.add("Lumber")
+    my_train.add("Steel Pipes")
+    
+    # check the final layout
+    my_train.display()
